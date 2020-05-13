@@ -1,174 +1,104 @@
+<!DOCTYPE HTML>  
+<html>
+<head>
+<style>
+.error {color: #FF0000;}
+</style>
+</head>
+<body>  
 
-<!DOCTYPE html><html lang="en"><head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="bootstrap.min.css">
-  <script src="jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head><body background="1.jpg" style="background-size: cover;
-  background-position: center;">
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <font face="Gabriola">
-          <a class="navbar-brand" href="#">I DONT KNOW I AM</a></font>
-      </div>
-      <div class="collapse navbar-collapse" id="myNavbar"><ul class="nav navbar-nav navbar-right">
-          <li><a href="Register/Register.HTML"><span class="glyphicon glyphicon-user"></span>New User Register</a></li>
-          <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }.container-fluid h1 {
-      color: white;
-      text-transform: uppercase;
-      font-weight: 60vh;
+<?php>
+// define variables and set to empty values
+$nameErr = $emailErr = $genderErr = $websiteErr = "";
+$name = $email = $gender = $comment = $website = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (empty($_POST["name"])) {
+    $nameErr = "Name is required";
+  } else {
+    $name = test_input($_POST["name"]);
+    // check if name only contains letters and whitespace
+    if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
+      $nameErr = "Only letters and white space allowed"; 
     }
-
-    .container-fluid a h2 {
-      color: white;
-      text-transform: uppercase;
-      font-weight: 300;
-      font-size: 15px;
-    }
-
-    .container-fluid select {
-      border: 0;
-      background: rgba(59, 54, 54, 0.6);
-      display: block;
-      margin: 20px auto;
-      text-align: center;
-      font-size: 15px;
-      border: 2px solid #3498db;
-      padding: 7px 10px;
-      width: 330px;
-      outline: none;
-      color: #fff;
-      border-radius: 15px;
-      transition: 0.25s;
-    }
-
-
-
-    .container-fluid input {
-      border: 0;
-      background: none;
-      display: block;
-      font-size: 15px;
-      margin: 20px auto;
-      text-align: center;
-      border: 2px solid #3498db;
-      padding: 12px 10px;
-      width: 240px;
-      outline: none;
-      color: white;
-      border-radius: 24px;
-      transition: 0.25s;
-    }
-
-    .container-fluid input[type="text"]:focus,
-    .container-fluid input[type="password"]:focus {
-      width: 300px;
-      border-color: #ffffff;
-    }
-
-    .container-fluid input[ type="submit"] {
-      border: 0;
-      width: 120px;
-      background: none;
-      display: block;
-      margin: 20px auto;
-      text-align: center;
-      border: 2px solid #ffffff;
-      padding: 14px 40px;
-      outline: none;
-      font-size: medium;
-      color: white;
-      border-radius: 24px;
-      transition: 0.25s;
-      cursor: pointer;
-    }
-
-    .container-fluid input[type="submit"]:hover {
-      background: #ffff;
-      color: black;
-    }.x-man:after {
-      content: '';
-      animation: changetext 10s infinite linear;
-      color: #3498db;
-      text-transform: capitalize;
-      font-size: 30px
-    }
-
-    @keyframes changetext {
-      0% {
-        content: "amit";
-      }
-
-      20% {
-        content: "rupendra";
-      }
-
-      40% {
-        content: "mohan";
-      }
-
-      60% {
-        content: "somu";
-      }
-
-      80% {
-        content: "arvind";
-      }
-
-      100% {
-        content: "riya";
-      }
-    }
-  </style>
+  }
   
-
-  <div class="full"><form class="box" action="home/home.html" method="POST"></form>
-  <div class="container" action="home/home.html" method="POST">
-    <center>
-      <font color="white">
-        <h3> <u>SHIV KUMAR</u> </h3>
-        <h2> WELCOME <span class="x-man"> </span></h2>
-        <a>MY BEST FRIRND </a>
-      </font>
-  </center></div>
-  <br>
-  <div class="container-fluid"action="userinfo.php" method="POST">
-    <center>
-      <h1> login </h1>
-      <a>
-        <h2>select your options:</h2><br>
-        <select name="select">
-          <option>Other</option>
-          <option>Family Member</option>
-          <option>Friend</option>
-        </select>
-      </a>
-      <input type="text" name="username" placeholder="username">
-    <input type="password" name="password" placeholder="password">
+  if (empty($_POST["email"])) {
+    $emailErr = "Email is required";
+  } else {
+    $email = test_input($_POST["email"]);
+    // check if e-mail address is well-formed
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $emailErr = "Invalid email format"; 
+    }
+  }
     
-      <button type="button" class="btn btn-primary" >Submit</button>
-       <a href="home.html"><button type="button" class="btn btn-primary">Guast</button></a>
- 
-  </center></div>
+  if (empty($_POST["website"])) {
+    $website = "";
+  } else {
+    $website = test_input($_POST["website"]);
+    // check if URL address syntax is valid (this regular expression also allows dashes in the URL)
+    if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
+      $websiteErr = "Invalid URL"; 
+    }
+  }
 
-  
-  
+  if (empty($_POST["comment"])) {
+    $comment = "";
+  } else {
+    $comment = test_input($_POST["comment"]);
+  }
 
-</body></html>
+  if (empty($_POST["gender"])) {
+    $genderErr = "Gender is required";
+  } else {
+    $gender = test_input($_POST["gender"]);
+  }
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
+
+<h2>PHP Form Validation Example</h2>
+<p><span class="error">* required field</span></p>
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
+  Name: <input type="text" name="name" value="<?php echo $name;?>">
+  <span class="error">* <?php echo $nameErr;?></span>
+  <br><br>
+  E-mail: <input type="text" name="email" value="<?php echo $email;?>">
+  <span class="error">* <?php echo $emailErr;?></span>
+  <br><br>
+  Website: <input type="text" name="website" value="<?php echo $website;?>">
+  <span class="error"><?php echo $websiteErr;?></span>
+  <br><br>
+  Comment: <textarea name="comment" rows="5" cols="40"><?php echo $comment;?></textarea>
+  <br><br>
+  Gender:
+  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="female">Female
+  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="male") echo "checked";?> value="male">Male
+  <input type="radio" name="gender" <?php if (isset($gender) && $gender=="other") echo "checked";?> value="other">Other  
+  <span class="error">* <?php echo $genderErr;?></span>
+  <br><br>
+  <input type="submit" name="submit" value="Submit">  
+</form>
+
+<?php
+echo "<h2>Your Input:</h2>";
+echo $name;
+echo "<br>";
+echo $email;
+echo "<br>";
+echo $website;
+echo "<br>";
+echo $comment;
+echo "<br>";
+echo $gender;
+?>
+
+</body>
+</html>
